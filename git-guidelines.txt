@@ -1,0 +1,191 @@
+Git Workflow Practices 
+
+ 
+
+1. Never push commits directly into any mainline branches. 
+
+    a. Instead, create a pull request that describes why your set of changes should be integrated into the mainline branch, and merge that into the mainline. 
+
+    b. Closed pull requests can summarize the project’s history. 
+
+    c. A mainline branch is usually master but can also be develop. 
+
+2. Always create a topic branch for active development. 
+
+    a. One developer per branch and one branch for adding a new feature or fixing a bug.  
+
+        i. If a feature or bug fix needs multiple developers, each developer needs to have his/her sub-branch addressing one aspect of the fix. 
+
+    b. When the code is ready to be shared, each developer needs to push it in the shared feature branch.  
+
+        i. The other developer can then rebase the changes into their individual branches. 
+
+       ii. When the feature is complete, merge all changes into the shared feature branch and create a pull request from it. 
+
+    c. Never delete unmerged remote branches. In Git, a branch is not a commit, but a pointer to a commit. If a commit in Git is not pointed to by any branch, eventually garbage collection will remove it. In order to keep the changes in case we need them, but not clutter the git branch listing, do:  
+
+        i. git merge -s ours --edit obsolete-branch (merge obsolete-branch into the current branch, but completely discarding the changes in the obsolete branch. This also lets you write a message explaining the situation) 
+
+       ii. If those changes are ever needed, checkout the last commit on the merged branch and create a new branch pointing to it.  
+
+    d. Lifecycle of a topic branch  
+
+3. Commit frequently. 
+
+    a. Commit for any new functions, classes, drafts of classes, before experimenting with a new feature, a test, etc.  
+
+    b. If a commit is more than 100 lines long, re-evaluate to see if there are multiple logical changes.  
+
+    c. Write succinct and descriptive commit messages.  
+
+        i. Keep subject under 50 characters. 
+
+       ii. Make the commit specific, able to remind yourself where you left off, and what exactly was accomplished. 
+
+      iii. Separate subject from body with a blank line 
+
+       iv. The body should succinctly (in about 72 characters) include information regarding what and why, not how.  
+
+        v. Ideally use imperative for subject line, capitalize first letter, following Git convention, and don’t end in punctuation: 
+
+            1. “Add feature x” 
+
+    d. Case: Experimenting with new features: 
+
+        i. Commit previous stable work 
+
+           git commit -m "Safe point!" 
+
+       ii. Write experimental code. 
+
+      iii. Save progress on experimental features by creating a new branch for them 
+
+           git checkout -b experimental-branch 
+
+           git commit -m "I want to save this for later" 
+
+       iv. Go back to previous safe branch: 
+
+           git checkout - 
+
+           git reset --hard 
+
+        v. Back to previous non-experimental code  
+
+    e. Case: Done working for the day, but feature is not complete yet.  
+
+        i. Commit indicating work is not complete yet. 
+        
+           git commit -m "Work in progress: Feature x" 
+
+       ii. When ready to work on it again the next day, reset most recent commit while keeping those changes locally 
+
+           git reset HEAD^ 
+
+4. Always review code before committing it. 
+
+Instead of using  git commit –a,  which adds all uncommitted changes (except new files) to the index, try to use git add –-patch  or  git add –interactive, to be able to review changes chunk by chunk and have more control over the commit.  
+
+git add –-patch does not add new files directly – to start tracking new files do git add <filename(s)> 
+
+The command git diff --cached allows you to do a final review of what is to be committed. 
+
+Rewriting history (https://www.atlassian.com/git/tutorials/rewriting-history): 
+
+Use git commit --amend to change your latest log message or to make modifications to the most recent commit. 
+
+Replaces previous commit with a new one. 
+
+Convenient way to fix minor issues (staged). 
+
+The --no-edit flag will allow you to make the amendment to your commit without changing its commit message. It will look like the latest amend and the previous commit were part of the same snapshot. 
+
+Do not amend other developers’ commits, since an amend removes the commit from history to replace it with the new amended version. 
+
+Use git rebase to combine older or multiple commits and modify history of a branch. 
+
+It combines a sequence of commits into a new base commit. 
+
+With GitHub in particular, rebasing is used to keep a clean and clear history (free of merge commits too), allowing one to fix errors and refine their work and its presentation. 
+
+Do not use git rebase  with shared (pushed) commits, since it might affect work from others on that branch, as well as obscure its developmental history.  
+
+git rebase -i gives much more fine-grained control over history modifications than a standard git rebase. It allows a user to alter individual commits rather than move all of them to a new base.  
+
+git rebase --edit, during a rebase stops playback and allows you to edit commits through git commit --amend 
+
+During rebasing, it is possible to combine commit messages as well.  
+
+Reword (-r) allows you to rewrite the individual commit message 
+
+Squashing (-s) allows the user to specify which commits to combine to the previous commit. Marked commits will be paused on, and the user will be prompted to edit that commit message into a combined one. This functionality illustrates the true power of rebasing in terms of having a clean, linear history.  
+
+Fixup (-f) is similar to squash, but the commit messages marked will be discarded in favor of the previous commit message. 
+
+Git commits edited with rebase will have a different ID from the original commit, which has been re-written.  
+
+Merging:  
+
+From the topic branch run git fetch to get locally the latest remote changes.  
+
+Run git rebase origin/<main branch> to synchronize changes in a clean way 
+
+Squash commits.  
+
+Push your feature branch to the remote repository 
+
+Create a pull request and have it reviewed. 
+
+Merge code into main branch. 
+
+Push changes at least once a day.  
+
+It allows for easier and more transparent collaboration 
+
+It backs up your work 
+
+What not to commit (generally) 
+
+Don’t leak secrets into the remote repository. That includes: passwords, API keys, private tokens, and SSH keys. 
+
+Local configuration files (.idea file). Those are private configuration files that contain information unnecessary to be publicized.  
+
+File data (.txt, .csv, image and video files etc) 
+
+Create a .gitignore file to exclude local files and directories from ever being committed 
+
+Use the task list. 
+
+This new feature allows to-dos to be tracked and be visible to everyone. 
+
+ 
+
+ 
+
+ 
+
+Resources and References:  
+
+https://refactorsaurusrex.com/posts/basic-git-workflow-guidelines/ 
+
+https://chris.beams.io/posts/git-commit/ 
+
+https://www.lullabot.com/articles/git-best-practices-workflow-guidelines 
+
+https://www.atlassian.com/git/tutorials/rewriting-history 
+
+https://www.datree.io/resources/github-best-practices 
+
+https://nvie.com/posts/a-successful-git-branching-model/ 
+
+https://opensource.com/article/20/7/git-best-practices 
+
+ 
+
+ 
+
+ 
+
+ 
+
+ 
