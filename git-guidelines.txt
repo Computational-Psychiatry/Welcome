@@ -84,81 +84,84 @@ Git Workflow Practices
 
 4. Always review code before committing it. 
 
-Instead of using  git commit –a,  which adds all uncommitted changes (except new files) to the index, try to use git add –-patch  or  git add –interactive, to be able to review changes chunk by chunk and have more control over the commit.  
+  a. Instead of using  git commit –a,  which adds all uncommitted changes (except new files) to the index, try to use git add –-patch  or  git   
+     add –interactive, to be able to review changes chunk by chunk and have more control over the commit.  
 
-git add –-patch does not add new files directly – to start tracking new files do git add <filename(s)> 
+  b. git add –-patch does not add new files directly – to start tracking new files do git add <filename(s)> 
 
-The command git diff --cached allows you to do a final review of what is to be committed. 
+  c. The command git diff --cached allows you to do a final review of what is to be committed. 
 
-Rewriting history (https://www.atlassian.com/git/tutorials/rewriting-history): 
+5. Rewriting history (https://www.atlassian.com/git/tutorials/rewriting-history): 
 
-Use git commit --amend to change your latest log message or to make modifications to the most recent commit. 
+  a. Use git commit --amend to change your latest log message or to make modifications to the most recent commit. 
 
-Replaces previous commit with a new one. 
+    i. Replaces previous commit with a new one. 
 
-Convenient way to fix minor issues (staged). 
+   ii. Convenient way to fix minor issues (staged). 
 
-The --no-edit flag will allow you to make the amendment to your commit without changing its commit message. It will look like the latest amend and the previous commit were part of the same snapshot. 
+  iii. The --no-edit flag will allow you to make the amendment to your commit without changing its commit message. It will look like the latest 
+       amend and the previous commit were part of the same snapshot. 
 
-Do not amend other developers’ commits, since an amend removes the commit from history to replace it with the new amended version. 
+   iv. Do not amend other developers’ commits, since an amend removes the commit from history to replace it with the new amended version. 
 
-Use git rebase to combine older or multiple commits and modify history of a branch. 
+  b. Use git rebase to combine older or multiple commits and modify history of a branch. 
 
-It combines a sequence of commits into a new base commit. 
+    i. It combines a sequence of commits into a new base commit. 
 
-With GitHub in particular, rebasing is used to keep a clean and clear history (free of merge commits too), allowing one to fix errors and refine their work and its presentation. 
+   ii. With GitHub in particular, rebasing is used to keep a clean and clear history (free of merge commits too), allowing one to fix errors and 
+       refine their work and its presentation. 
 
-Do not use git rebase  with shared (pushed) commits, since it might affect work from others on that branch, as well as obscure its developmental history.  
+  iii. Do not use git rebase  with shared (pushed) commits, since it might affect work from others on that branch, as well as obscure its 
+       developmental history.  
 
-git rebase -i gives much more fine-grained control over history modifications than a standard git rebase. It allows a user to alter individual commits rather than move all of them to a new base.  
+   iv. git rebase -i gives much more fine-grained control over history modifications than a standard git rebase. It allows a user to alter 
+       individual commits rather than move all of them to a new base.  
 
-git rebase --edit, during a rebase stops playback and allows you to edit commits through git commit --amend 
+    v. git rebase --edit, during a rebase stops playback and allows you to edit commits through git commit --amend 
 
-During rebasing, it is possible to combine commit messages as well.  
+      1. During rebasing, it is possible to combine commit messages as well.  
 
-Reword (-r) allows you to rewrite the individual commit message 
+      2. Reword (-r) allows you to rewrite the individual commit message. Squashing (-s) allows the user to specify which commits to combine to 
+         the previous commit. Marked commits will be paused on, and the user will be prompted to edit that commit message into a combined one.
+         This functionality illustrates the true power of rebasing in terms of having a clean, linear history.  
 
-Squashing (-s) allows the user to specify which commits to combine to the previous commit. Marked commits will be paused on, and the user will be prompted to edit that commit message into a combined one. This functionality illustrates the true power of rebasing in terms of having a clean, linear history.  
+      3. Fixup (-f) is similar to squash, but the commit messages marked will be discarded in favor of the previous commit message. 
 
-Fixup (-f) is similar to squash, but the commit messages marked will be discarded in favor of the previous commit message. 
+   iv. Git commits edited with rebase will have a different ID from the original commit, which has been re-written.  
 
-Git commits edited with rebase will have a different ID from the original commit, which has been re-written.  
+6. Merging:  
 
-Merging:  
+  a. From the topic branch run git fetch to get locally the latest remote changes.  
 
-From the topic branch run git fetch to get locally the latest remote changes.  
+  b. Run git rebase origin/<main branch> to synchronize changes in a clean way 
 
-Run git rebase origin/<main branch> to synchronize changes in a clean way 
+  c. Squash commits.  
 
-Squash commits.  
+  d. Push your feature branch to the remote repository 
 
-Push your feature branch to the remote repository 
+  e. Create a pull request and have it reviewed. 
 
-Create a pull request and have it reviewed. 
+  f. Merge code into main branch. 
 
-Merge code into main branch. 
+7. Push changes at least once a day.  
 
-Push changes at least once a day.  
+  a. It allows for easier and more transparent collaboration 
 
-It allows for easier and more transparent collaboration 
+  b. It backs up your work 
 
-It backs up your work 
+8. What not to commit (generally) 
 
-What not to commit (generally) 
+  a. Don’t leak secrets into the remote repository. That includes: passwords, API keys, private tokens, and SSH keys. 
 
-Don’t leak secrets into the remote repository. That includes: passwords, API keys, private tokens, and SSH keys. 
+  b. Local configuration files (.idea file). Those are private configuration files that contain information unnecessary to be publicized.  
 
-Local configuration files (.idea file). Those are private configuration files that contain information unnecessary to be publicized.  
+  c. File data (.txt, .csv, image and video files etc) 
 
-File data (.txt, .csv, image and video files etc) 
+  d. Create a .gitignore file to exclude local files and directories from ever being committed 
 
-Create a .gitignore file to exclude local files and directories from ever being committed 
+9. Use the task list. 
 
-Use the task list. 
-
-This new feature allows to-dos to be tracked and be visible to everyone. 
-
- 
+  a. This feature allows to-dos to be tracked and be visible to everyone. 
 
  
 
